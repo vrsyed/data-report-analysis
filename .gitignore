@@ -1,0 +1,4 @@
+.env
+recon.db
+__pycache__/
+.venv/
