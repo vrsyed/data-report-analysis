@@ -2,41 +2,102 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Recon AI</title>
 <style>
-:root{--bg:#eef1f4;--ink:#14202b;--mute:#5b6b7a;--line:#d3dae1;--card:#fff;--acc:#0b6e8a;--warn:#b4541a}
-@media(prefers-color-scheme:dark){:root{--bg:#0f161d;--ink:#e6edf3;--mute:#8fa1b2;--line:#25323e;--card:#16212b;--acc:#4cb3d1;--warn:#e08a52}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,Segoe UI,sans-serif}
+:root{--bg:#eef1f4;--ink:#14202b;--mute:#5b6b7a;--line:#d3dae1;--card:#fff;--acc:#0b6e8a;--warn:#b4541a;--on:#fff}
+@media(prefers-color-scheme:dark){:root{--bg:#0f161d;--ink:#e6edf3;--mute:#8fa1b2;--line:#25323e;--card:#16212b;--acc:#4cb3d1;--warn:#e08a52;--on:#0b1218}}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,Segoe UI,sans-serif}
 main{max-width:1100px;margin:0 auto;padding:24px 16px 64px}
-h1{font-size:22px;margin:0 0 4px}p.sub{color:var(--mute);margin:0 0 20px}
-.bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
-button{background:var(--acc);color:#fff;border:0;border-radius:6px;padding:9px 14px;font:inherit;cursor:pointer}
-button.alt{background:transparent;color:var(--acc);border:1px solid var(--acc)}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+h1{font-size:22px;margin:0 0 4px}h2{font-size:16px;margin:22px 0 10px}h3{font-size:14px;margin:0 0 10px}p.sub,.sub{color:var(--mute);margin:0 0 20px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:20px}
+button,a.btn{background:var(--acc);color:var(--on);border:0;border-radius:6px;padding:9px 14px;font:inherit;cursor:pointer;text-decoration:none;display:inline-block}
+button.alt,a.btn.alt{background:transparent;color:var(--acc);border:1px solid var(--acc)}
+button.chip{background:transparent;color:var(--acc);border:1px solid var(--acc);padding:5px 10px;font-size:13px}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:20px}
 .tile,.panel{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px}
 .tile b{display:block;font-size:26px}.tile span{color:var(--mute);font-size:13px}
 .row{display:grid;grid-template-columns:150px 1fr 60px;gap:10px;align-items:center;margin:6px 0;font-size:14px}
+.hb{display:grid;grid-template-columns:120px 1fr 70px;gap:8px;align-items:center;margin:7px 0;font-size:13px}
+.hb span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hb b{text-align:right}
 .track{background:var(--line);height:10px;border-radius:5px}.fill{background:var(--acc);height:10px;border-radius:5px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:12px;margin-bottom:12px}
+.legend{list-style:none;margin:0;padding:0;font-size:13px}.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px}
+ul.ins{margin:0 0 16px;padding-left:18px}
 .scroll{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13px}
 th,td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}td.wrap{white-space:normal;min-width:260px}
 input[type=text],select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:9px;font:inherit}
-input[type=text]{flex:1;min-width:220px}h2{font-size:16px;margin:22px 0 10px}
+input[type=text]{flex:1;min-width:220px}input[type=file]{color:var(--ink)}
 pre{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:10px;overflow-x:auto}.err{color:var(--warn)}
+button.chip.on{background:var(--acc);color:var(--on)}.sl{margin-bottom:10px}.sl .chip{margin:0 6px 6px 0}.sl input[type=date]{padding:5px}
+.hb[data-v]{cursor:pointer}.hb.sel span{font-weight:700}.hb.sel .fill{outline:2px solid var(--ink)}
+.rec{display:flex;gap:10px;align-items:flex-start;margin:8px 0;font-size:14px}.bd{flex:none;min-width:54px;text-align:center;font-size:11px;font-weight:700;border:1px solid var(--acc);color:var(--acc);border-radius:4px;padding:1px 6px}
+.bd.fix,.bd.risk{border-color:var(--warn);color:var(--warn)}
+[data-v]{cursor:pointer}svg [data-v]:focus-visible{outline:2px solid var(--ink)}
+.ph{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}.ph h3{margin:0}.ctype select{padding:4px 6px;font-size:12px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.legend li{margin:3px 0}
+#mode{font-weight:600;border-color:var(--acc)}label.f{display:flex;flex-direction:column;font-size:12px;color:var(--mute);gap:2px}
 </style></head><body><main>
+
+<div class="bar"><label for="mode" class="sub" style="margin:0">Workflow</label>
+<select id="mode"><option value="recon">Payment reconciliation (demo data)</option><option value="file">Analyze my Excel / CSV file</option><option value="report">Report dashboard (Power BI style)</option></select></div>
+
+<section id="recon">
 <h1>Payment reconciliation</h1>
 <p class="sub">Match the ledger against the bank feed, triage mismatches with AI, and ask questions in plain English.</p>
-<div class="bar"><button id="run">Run reconciliation</button><button id="tri" class="alt">Triage 20 exceptions</button><span id="msg" class="sub" role="status"></span></div>
+<div class="bar"><button id="run">Run reconciliation</button><button id="tri" class="alt">Triage 20 exceptions</button><span id="msg" class="sub" role="status" style="margin:0"></span></div>
 <div class="tiles" id="tiles"></div>
 <div class="panel"><div id="bars"></div></div>
 <h2>Exceptions</h2>
 <div class="bar"><select id="cat" aria-label="Filter by category"><option value="">All categories</option></select></div>
 <div class="panel scroll"><table><thead><tr><th>Category</th><th>Reference</th><th>Merchant</th><th>Ledger</th><th>Bank</th><th>Diff</th><th>AI root cause</th><th>Suggested action</th></tr></thead><tbody id="ex"></tbody></table></div>
 <h2>Ask the data</h2>
-<div class="bar"><input id="q" type="text" aria-label="Question" placeholder="Which merchant has the most amount mismatches?"><button id="ask">Ask</button></div>
+<div class="bar"><input id="q" type="text" aria-label="Question" placeholder="Which merchant has the most amount_mismatch rows?"><button id="ask">Ask</button></div>
 <div id="ans"></div>
+</section>
+
+<div id="fileBar" hidden>
+<p class="sub">Upload an .xlsx or .csv file once. It is used by both "Analyze my file" and "Report dashboard".</p>
+<div class="bar"><input id="ff" type="file" accept=".xlsx,.xlsm,.csv" aria-label="Choose file"><button id="fup">Upload and analyze</button><span id="fmsg" class="sub" role="status" style="margin:0"></span></div>
+</div>
+
+<section id="file" hidden>
+<h1>Analyze my Excel / CSV file</h1>
+<p class="sub">Rows, duplicates and missing values are counted instantly; questions are answered with SQL written by the AI.</p>
+<div id="fout"></div>
+<div id="fbox" hidden>
+<h2>Ask about this data</h2>
+<div class="bar" id="fchips"></div>
+<div class="bar"><input id="fq" type="text" aria-label="Question about your file" placeholder="What is the average unit price per product?"><button id="fask">Ask</button></div>
+<div id="fans"></div>
+</div>
+</section>
+
+<section id="report" hidden>
+<h1>Report dashboard</h1>
+<p class="sub">Pick a calculation, group the data, and use the slicers (or click a bar) to filter everything at once. Numbers are calculated exactly from your file.</p>
+<div id="rempty" class="panel">Upload a file above to build a report.</div>
+<div id="rbody" hidden>
+<div class="bar" id="rctl"></div>
+<div id="rslice"></div>
+<div class="bar"><button id="rai_btn">Generate AI recommendations</button><button id="rdl" class="alt">Download report (HTML)</button><a id="rcsv" class="btn alt" href="/files/export" download>Download data for Power BI (CSV)</a></div>
+<p class="sub" style="margin:-8px 0 12px;font-size:12px">Tip: click a bar, column, point or legend item to filter the whole report. Use the small dropdown on each chart to change its type.</p>
+<div id="rai" class="panel" hidden></div>
+<div id="rcanvas"></div>
+</div>
+</section>
+
 </main><script>
 const $=s=>document.querySelector(s);
-const api=async(p,o)=>{const r=await fetch(p,o);const t=await r.text();let j;try{j=JSON.parse(t)}catch{j=null}if(!r.ok)throw new Error((j&&j.detail)||t||r.statusText);return j};
-const say=(t,bad)=>{$('#msg').textContent=t;$('#msg').className='sub'+(bad?' err':'')};
-const esc=s=>String(s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const api=async(p,o)=>{const r=await fetch(p,o);const t=await r.text();let j=null;try{j=JSON.parse(t)}catch{}if(!r.ok)throw new Error((j&&j.detail)||t||r.statusText);return j};
+const say=(id,t,bad)=>{const e=$(id);e.textContent=t;e.className='sub'+(bad?' err':'')};
+const table=(cols,rows)=>`<div class="panel scroll"><table><thead><tr>${cols.map(c=>`<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>'<tr>'+cols.map(c=>`<td>${esc(r[c])}</td>`).join('')+'</tr>').join('')}</tbody></table></div>`;
+let fileName='';
+
+$('#mode').onchange=()=>{const m=$('#mode').value;
+  $('#recon').hidden=m!=='recon';$('#fileBar').hidden=m==='recon';$('#file').hidden=m!=='file';$('#report').hidden=m!=='report'};
+
+/* ---------- Payment reconciliation ---------- */
 async function load(){
   try{const s=await api('/stats');
     $('#tiles').innerHTML=[['Transactions',s.total],['Match rate',s.match_rate+'%'],['Amount outliers',s.anomalies],['AI mode',s.ai_enabled?'LLM':'Offline rules']].map(t=>`<div class="tile"><b>${t[1]}</b><span>${t[0]}</span></div>`).join('');
@@ -45,12 +106,115 @@ async function load(){
     const sel=$('#cat');if(sel.options.length==1)s.by_category.filter(c=>c.category!='matched').forEach(c=>sel.add(new Option(c.category,c.category)));
     const e=await api('/exceptions?limit=50&category='+sel.value);
     $('#ex').innerHTML=e.map(r=>`<tr><td>${r.category}</td><td>${esc(r.key)}</td><td>${esc(r.merchant)}</td><td>${r.ledger_amount??'-'}</td><td>${r.bank_amount??'-'}</td><td>${r.diff}</td><td class="wrap">${esc(r.ai_cause)||'-'}</td><td class="wrap">${esc(r.ai_action)||'-'}</td></tr>`).join('');
-  }catch(e){say(e.message,1)}}
-$('#run').onclick=async()=>{say('Running...');try{const r=await api('/reconcile',{method:'POST'});say(`Reconciled ${r.ledger_rows} ledger rows against ${r.bank_rows} bank rows.`);load()}catch(e){say(e.message,1)}};
-$('#tri').onclick=async()=>{say('Triaging...');try{const r=await api('/triage?limit=20',{method:'POST'});say(`Triaged ${r.triaged} (${r.mode}).`);load()}catch(e){say(e.message,1)}};
+  }catch(e){say('#msg',e.message,1)}}
+$('#run').onclick=async()=>{say('#msg','Running...');try{const r=await api('/reconcile',{method:'POST'});say('#msg',`Reconciled ${r.ledger_rows} ledger rows against ${r.bank_rows} bank rows.`);load()}catch(e){say('#msg',e.message,1)}};
+$('#tri').onclick=async()=>{say('#msg','Triaging...');try{const r=await api('/triage?limit=20',{method:'POST'});say('#msg',`Triaged ${r.triaged} (${r.mode}).`);load()}catch(e){say('#msg',e.message,1)}};
 $('#cat').onchange=load;
 $('#ask').onclick=async()=>{$('#ans').innerHTML='';try{const r=await api('/ask',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:$('#q').value})});
   const k=r.rows[0]?Object.keys(r.rows[0]):[];
-  $('#ans').innerHTML=`<pre>${esc(r.sql)}</pre><div class="panel scroll"><table><thead><tr>${k.map(x=>`<th>${esc(x)}</th>`).join('')}</tr></thead><tbody>${r.rows.map(o=>'<tr>'+k.map(x=>`<td>${esc(o[x])}</td>`).join('')+'</tr>').join('')}</tbody></table></div>`}catch(e){$('#ans').innerHTML=`<p class="err">${esc(e.message)}</p>`}};
+  $('#ans').innerHTML=`<pre>${esc(r.sql)}</pre>`+(k.length?table(k,r.rows):'<p class="sub">No rows returned.</p>')}catch(e){$('#ans').innerHTML=`<p class="err">${esc(e.message)}</p>`}};
 load();
+
+/* ---------- Analyze my Excel / CSV file ---------- */
+function showFile(p){
+  fileName=p.filename;
+  $('#fout').innerHTML=p.tables.map(t=>`<h2>${esc(t.table)} <span class="sub">(from ${esc(p.filename)})</span></h2>
+  <div class="tiles"><div class="tile"><b>${t.rows}</b><span>Rows</span></div><div class="tile"><b>${t.columns}</b><span>Columns</span></div>
+  <div class="tile"><b>${t.duplicate_rows}</b><span>Duplicate rows</span></div><div class="tile"><b>${t.missing_cells}</b><span>Missing cells</span></div></div>
+  ${table(['name','type','missing','missing_pct','unique','min','max','mean','median'],t.column_info)}
+  ${t.duplicate_rows?`<h2>Duplicate rows (sample)</h2>${table(Object.keys(t.duplicate_sample[0]),t.duplicate_sample)}`:''}`).join('');
+  const t=p.tables[0],num=t.column_info.find(c=>c.mean!==undefined);
+  const qs=[`How many rows are in ${t.table}?`,`How many duplicate rows are in ${t.table}?`];
+  if(num)qs.push(`What are the average, minimum and maximum of ${num.name}?`,`Show the top 5 rows by ${num.name}`);
+  $('#fchips').innerHTML=qs.map(q=>`<button class="chip" data-q="${esc(q)}">${esc(q)}</button>`).join('');
+  document.querySelectorAll('#fchips button').forEach(b=>b.onclick=()=>{$('#fq').value=b.dataset.q;askFile()});
+  $('#fbox').hidden=false;
+}
+$('#fup').onclick=async()=>{const f=$('#ff').files[0];if(!f)return say('#fmsg','Choose a file first.',1);say('#fmsg','Uploading...');
+  const fd=new FormData();fd.append('file',f);
+  try{showFile(await api('/files/upload',{method:'POST',body:fd}));say('#fmsg','Done.');loadReport(true)}catch(e){say('#fmsg',e.message,1)}};
+async function askFile(){$('#fans').innerHTML='Thinking...';
+  try{const r=await api('/files/ask',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:$('#fq').value})});
+    $('#fans').innerHTML=(r.answer?`<p><b>${esc(r.answer)}</b></p>`:'')+`<pre>${esc(r.sql)}</pre>`+(r.rows.length?table(r.columns,r.rows):'<p class="sub">No rows returned.</p>')}
+  catch(e){$('#fans').innerHTML=`<p class="err">${esc(e.message)}</p>`}}
+$('#fask').onclick=askFile;
+api('/files/profile').then(p=>{showFile(p);loadReport(true)}).catch(()=>{});
+
+/* ---------- Report dashboard ---------- */
+let RS={filters:{},ranges:{}},LAST=null;
+const PAL=['#0b6e8a','#e08a52','#6a994e','#8e6bbf','#d1495b','#8d99ae'];
+const fmt=n=>{if(n==null)return'-';const a=Math.abs(n);return a>=1e6?(n/1e6).toFixed(2)+'M':a>=1e3?(n/1e3).toFixed(1)+'K':String(+n.toFixed(2))};
+const CT={cat:'bar',share:'donut',trend:'line'};
+const TYPES={cat:[['bar','Bar'],['column','Column'],['line','Line'],['area','Area'],['pie','Pie'],['donut','Donut']],share:[['donut','Donut'],['pie','Pie'],['bar','Bar'],['column','Column']],trend:[['line','Line'],['area','Area'],['column','Column']]};
+const short=(s,n)=>{s=String(s);return s.length>n?s.slice(0,n-1)+'…':s};
+const hit=(col,l)=>col&&l!=='Other'?` data-col="${esc(col)}" data-v="${esc(l)}" role="button" tabindex="0"`:'';
+const isOn=(col,l)=>col&&(RS.filters[col]||[]).includes(l);
+function head(key,title){return `<div class="ph"><h3>${esc(title)}</h3><label class="ctype"><span class="sr">Chart type for ${esc(title)}</span><select data-ct="${key}">${TYPES[key].map(t=>`<option value="${t[0]}"${CT[key]===t[0]?' selected':''}>${t[1]}</option>`).join('')}</select></label></div>`}
+function hbars(c,col){const mx=Math.max(...c.values.map(Math.abs),1);
+  return c.labels.map((l,i)=>`<div class="hb${isOn(col,l)?' sel':''}"${hit(col,l)} title="${esc(l)}"><span>${esc(l)}</span><div class="track"><div class="fill" style="width:${100*Math.abs(c.values[i])/mx}%"></div></div><b>${fmt(c.values[i])}</b></div>`).join('')}
+function axes(c,W,H,P,lo,hi){const y=v=>H-P-((v-lo)/((hi-lo)||1))*(H-2*P);
+  return {y,grid:`<line x1="${P}" y1="${y(0)}" x2="${W-P}" y2="${y(0)}" style="stroke:var(--line)"/><text x="${P-4}" y="${y(hi)+4}" text-anchor="end" font-size="11" style="fill:var(--mute)">${fmt(hi)}</text><text x="${P-4}" y="${y(lo)+4}" text-anchor="end" font-size="11" style="fill:var(--mute)">${fmt(lo)}</text>`}}
+function columns(c,col){const W=900,H=260,P=40,n=c.values.length,hi=Math.max(...c.values,0),lo=Math.min(...c.values,0),bw=(W-2*P)/n,step=Math.ceil(n/12),A=axes(c,W,H,P,lo,hi);
+  const bars=c.values.map((v,i)=>{const x=P+i*bw+bw*.15,w=bw*.7,y1=A.y(v),y0=A.y(0),l=c.labels[i];
+    return `<g${hit(col,l)}><rect x="${x}" y="${Math.min(y1,y0)}" width="${w}" height="${Math.max(Math.abs(y1-y0),1)}" rx="2" style="fill:var(--acc)${isOn(col,l)?';stroke:var(--ink);stroke-width:2':''}"><title>${esc(l)}: ${fmt(v)}</title></rect>${n<=12?`<text x="${x+w/2}" y="${Math.min(y1,y0)-4}" text-anchor="middle" font-size="11" style="fill:var(--ink)">${fmt(v)}</text>`:''}${i%step==0?`<text x="${x+w/2}" y="${H-12}" text-anchor="middle" font-size="11" style="fill:var(--mute)">${esc(short(l,10))}</text>`:''}</g>`}).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Column chart">${A.grid}${bars}</svg>`}
+function lines(c,col,fill){const W=900,H=250,P=40,n=c.values.length,hi=Math.max(...c.values,0),lo=Math.min(...c.values,0),step=Math.ceil(n/8),A=axes(c,W,H,P,lo,hi);
+  const x=i=>P+(n==1?.5:i/(n-1))*(W-2*P),pts=c.values.map((v,i)=>`${x(i)},${A.y(v)}`).join(' ');
+  const xl=c.labels.map((l,i)=>i%step==0?`<text x="${x(i)}" y="${H-10}" text-anchor="middle" font-size="11" style="fill:var(--mute)">${esc(short(l,10))}</text>`:'').join('');
+  const dots=c.values.map((v,i)=>`<circle cx="${x(i)}" cy="${A.y(v)}" r="${isOn(col,c.labels[i])?6:3.5}" style="fill:var(--acc)"${hit(col,c.labels[i])}><title>${esc(c.labels[i])}: ${fmt(v)}</title></circle>`).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${fill?'Area':'Line'} chart">${A.grid}${fill?`<polygon points="${x(0)},${A.y(0)} ${pts} ${x(n-1)},${A.y(0)}" style="fill:var(--acc);opacity:.15"/>`:''}<polyline points="${pts}" fill="none" stroke-width="2.5" style="stroke:var(--acc)"/>${dots}${xl}</svg>`}
+function pie(c,col,ring){const tot=c.values.reduce((a,b)=>a+Math.max(b,0),0)||1,R=ring?60:40,SW=ring?26:80,C=2*Math.PI*R;let off=0;
+  const segs=c.values.map((v,i)=>{const len=C*Math.max(v,0)/tot,l=c.labels[i];const s=`<circle r="${R}" cx="80" cy="80" fill="none" stroke="${PAL[i%PAL.length]}" stroke-width="${SW}" stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${-off}" transform="rotate(-90 80 80)"${hit(col,l)}><title>${esc(l)}: ${fmt(v)}</title></circle>`;off+=len;return s}).join('');
+  const leg=c.labels.map((l,i)=>`<li${hit(col,l)}><i style="background:${PAL[i%PAL.length]}"></i>${esc(l)} <b>${(100*Math.max(c.values[i],0)/tot).toFixed(0)}%</b>${isOn(col,l)?' (filtered)':''}</li>`).join('');
+  return `<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><svg viewBox="0 0 160 160" width="170" role="img" aria-label="${ring?'Donut':'Pie'} chart">${segs}</svg><ul class="legend">${leg}</ul></div>`}
+function visual(key,c,col){if(!c||!c.values.length)return'';const t=CT[key];
+  const body=t==='bar'?hbars(c,col):t==='column'?columns(c,col):(t==='pie'||t==='donut')?pie(c,col,t==='donut'):lines(c,col,t==='area');
+  const wide=key==='trend'||t==='line'||t==='area'||t==='column';
+  return `<div class="panel"${wide?' style="grid-column:1/-1"':''}>${head(key,c.title)}${body}</div>`}
+const sel=(k,label,pairs,cur)=>`<label class="f">${label}<select data-k="${k}">${pairs.map(p=>{p=Array.isArray(p)?p:[p,p];return `<option value="${esc(p[0])}"${String(p[0])===String(cur)?' selected':''}>${esc(p[1])}</option>`}).join('')}</select></label>`;
+const BADGE={grow:'Grow',fix:'Fix',risk:'Risk',trend:'Trend',data:'Data',info:'Note'};
+function toggle(col,v){const a=RS.filters[col]||[];RS.filters[col]=a.includes(v)?a.filter(x=>x!==v):[...a,v];if(!RS.filters[col].length)delete RS.filters[col];loadReport()}
+function renderControls(j){const o=j.options,s=j.selected;
+  const numAgg=['sum','avg','min','max','median'].includes(s.agg),mlist=numAgg?o.measures:(s.agg==='distinct'?o.columns:[]);
+  const ph={sumx:'quantity * unit_price',avgx:'sales - profit',divide:'profit ; sales'}[s.agg];
+  $('#rctl').innerHTML=(o.tables.length>1?sel('table','Table',o.tables,s.table):'')+sel('agg','Calculation',o.aggs,s.agg)
+   +(mlist.length?sel('measure','Column',mlist,s.measure):'')
+   +(ph?`<label class="f">Formula (column names)<input type="text" data-k="expr" value="${esc(s.expr)}" placeholder="${ph}" style="min-width:220px"></label>`:'')
+   +(o.categories.length?sel('category','Group by',o.categories,s.category)+sel('share','Share by',o.categories,s.share):'')
+   +(o.dates.length?sel('date','Trend date',o.dates,s.date):'')
+   +sel('top','Top N',[5,10,20,30],s.top)+sel('sort','Order',[['desc','Highest first'],['asc','Lowest first']],s.sort)
+   +sel('trend_mode','Trend view',[['value','Values'],['cumulative','Cumulative'],['mom','Month-over-month %']],s.trend_mode);
+  document.querySelectorAll('#rctl [data-k]').forEach(e=>e.onchange=()=>{const k=e.dataset.k;RS[k]=k==='top'?+e.value:e.value;
+    if(k==='table'){RS.filters={};RS.ranges={};RS.measure='';RS.expr=''}loadReport()})}
+function renderSlicers(j){const on=RS.filters;let h='<div class="panel" style="margin-bottom:14px"><div class="bar" style="margin-bottom:8px"><b>Slicers</b><button class="chip" id="clr">Clear all filters</button></div>';
+  for(const [col,vals] of Object.entries(j.slicers))h+=`<div class="sl"><div class="sub" style="margin:0 0 4px">${esc(col)}</div>`+vals.map(v=>{const p=(on[col]||[]).includes(v);return `<button class="chip${p?' on':''}" aria-pressed="${p}" data-c="${esc(col)}" data-v="${esc(v)}">${esc(v)}</button>`}).join('')+'</div>';
+  for(const [col,r] of Object.entries(j.date_ranges)){const c=RS.ranges[col]||['',''];h+=`<div class="sl"><div class="sub" style="margin:0 0 4px">${esc(col)} range</div><input type="date" aria-label="${esc(col)} from" data-dc="${esc(col)}" data-e="0" min="${r[0]}" max="${r[1]}" value="${esc(c[0])}"> to <input type="date" aria-label="${esc(col)} to" data-dc="${esc(col)}" data-e="1" min="${r[0]}" max="${r[1]}" value="${esc(c[1])}"></div>`}
+  $('#rslice').innerHTML=h+'</div>';
+  document.querySelectorAll('#rslice .chip[data-c]').forEach(b=>b.onclick=()=>toggle(b.dataset.c,b.dataset.v));
+  document.querySelectorAll('#rslice input[type=date]').forEach(i=>i.onchange=()=>{const c=i.dataset.dc,r=RS.ranges[c]||['',''];r[+i.dataset.e]=i.value;if(r[0]||r[1])RS.ranges[c]=r;else delete RS.ranges[c];loadReport()});
+  $('#clr').onclick=()=>{RS.filters={};RS.ranges={};loadReport()}}
+function renderReport(j){renderControls(j);renderSlicers(j);$('#rcsv').href='/files/export?table='+encodeURIComponent(j.options.table);
+  const act=[...Object.entries(RS.filters).map(([c,v])=>`${c}: ${v.join(', ')}`),...Object.entries(RS.ranges).map(([c,r])=>`${c}: ${r[0]||'start'} to ${r[1]||'end'}`)];
+  const flt=act.length?`<p class="sub" style="margin:0 0 12px">Filters applied: ${esc(act.join(' | '))} (${j.rows.shown} of ${j.rows.total} rows)</p>`:'';
+  if(j.error){$('#rcanvas').innerHTML=flt+`<div class="panel err">${esc(j.error)}</div>`;return}
+  const rk=j.ranking.map(r=>({'Rank (RANKX)':r.rank,[j.bar.column]:r.name,'Value':fmt(r.value),'% of total':r.share==null?'-':r.share+'%','Cumulative %':r.cumulative==null?'-':r.cumulative+'%'}));
+  $('#rcanvas').innerHTML=flt+`<div class="tiles">${j.kpis.map(k=>`<div class="tile"><b>${fmt(k.value)}</b><span>${esc(k.label)}${k.sub?' ('+esc(k.sub)+')':''}</span></div>`).join('')}</div>`
+   +(j.recs.length?`<div class="panel" style="margin-bottom:12px"><h3>Insights and recommendations</h3>${j.recs.map(r=>`<div class="rec"><span class="bd ${r.type}">${BADGE[r.type]}</span><span>${esc(r.text)}</span></div>`).join('')}<p class="sub" style="margin:8px 0 0;font-size:12px">Rule-based suggestions from patterns in the filtered data. They show where to look; they do not prove causes.</p></div>`:'')
+   +`<div class="grid2">${visual('cat',j.bar,j.bar&&j.bar.column)}${visual('share',j.donut,RS.share)}${visual('trend',j.trend,null)}</div>`
+   +(rk.length?`<h2>Ranking (RANKX)</h2>${table(Object.keys(rk[0]),rk)}`:'')
+   +(j.data?`<h2>Data table</h2><p class="sub" style="margin:0 0 8px">Showing the first ${j.data.rows.length} of ${j.rows.shown} filtered rows. It updates with the slicers.</p>${table(j.data.columns,j.data.rows)}`:'');
+  document.querySelectorAll('#rcanvas [data-v]').forEach(el=>{const f=()=>toggle(el.dataset.col,el.dataset.v);el.onclick=f;el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();f()}}});
+  document.querySelectorAll('#rcanvas select[data-ct]').forEach(s=>s.onchange=()=>{CT[s.dataset.ct]=s.value;renderReport(LAST)})}
+async function loadReport(reset){
+  if(reset){RS={filters:{},ranges:{}};$('#rai').hidden=true}
+  try{const j=await api('/api/report',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(RS)});
+    Object.assign(RS,j.selected);LAST=j;$('#rempty').hidden=true;$('#rbody').hidden=false;renderReport(j)}
+  catch(e){$('#rempty').hidden=false;$('#rempty').textContent=e.message;$('#rbody').hidden=true}}
+$('#rai_btn').onclick=async()=>{const p=$('#rai');p.hidden=false;p.innerHTML='Thinking...';
+  try{const r=await api('/api/recommend',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(RS)});
+    p.innerHTML=`<h3>AI recommendations</h3><div style="white-space:pre-wrap">${esc(r.text)}</div><p class="sub" style="margin:8px 0 0;font-size:12px">Written by the AI from the summary numbers of the current view. Check them against your business context.</p>`}
+  catch(e){p.innerHTML=`<p class="err" style="margin:0">${esc(e.message)}</p>`}};
+$('#rdl').onclick=()=>{const css=document.querySelector('style').textContent;const cv=$('#rcanvas').cloneNode(true);cv.querySelectorAll('.ctype').forEach(e=>e.remove());const ai=$('#rai').hidden?'':`<div class="panel" style="margin-bottom:12px">${$('#rai').innerHTML}</div>`;
+  const html=`<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Report - ${esc(fileName)}</title><style>${css}</style></head><body><main><h1>Report: ${esc(fileName)}</h1>${ai}${cv.innerHTML}</main></body></html>`;
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));a.download='report.html';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500)};
 </script></body></html>

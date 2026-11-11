@@ -1,4 +1,5 @@
 .env
 recon.db
+analysis.db
 __pycache__/
 .venv/

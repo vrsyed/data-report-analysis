@@ -4,10 +4,12 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from sqlalchemy import create_engine, text
-from app import ai, matcher
+from app import ai, files, matcher, report
 
 engine = create_engine(os.getenv("DATABASE_URL", "sqlite:///recon.db"))
 app = FastAPI(title="Recon AI")
+app.include_router(files.router)
+app.include_router(report.router)
 HERE = os.path.dirname(__file__)
 
 def rows(df):
